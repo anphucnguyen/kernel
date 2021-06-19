@@ -65,7 +65,7 @@ jobs:
     - name: Get source code
       id: code
       working-directory: /workdir
-      if: steps.check.outputs.status == 'success'
+#       if: steps.check.outputs.status == 'success'
       run: |
         df -hT $PWD
         kernel_file=$(curl -s https://www.kernel.org/ | grep 'alt="Download"' | awk -F '"' '{print $2}')
@@ -83,7 +83,7 @@ jobs:
 
     - name: Compile the kernel
       id: compile
-      if: steps.code.outputs.status == 'success'
+#       if: steps.code.outputs.status == 'success'
       working-directory: /workdir
       run: |
         kernel_ver=$(curl -s https://www.kernel.org/ | grep ' <a href="https://cdn.kernel.org/pub/linux/kernel/' | head -n 1 | awk -F '[>]' '{print $2}' | awk -F '[<]' '{print $1}')
@@ -102,7 +102,7 @@ jobs:
 
     - name: Upload
       uses: actions/upload-artifact@main
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_DIR == 'true'
+#       if: steps.compile.outputs.status == 'success' && env.UPLOAD_DIR == 'true'
       with:
         name: ${{ env.FILE_DATE }}
         path: /workdir/upload
@@ -118,7 +118,7 @@ jobs:
 
     - name: Upload kernel to release
       uses: softprops/action-gh-release@v1
-      if: steps.tag.outputs.status == 'success' && !cancelled()
+#       if: steps.tag.outputs.status == 'success' && !cancelled()
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
       with:
